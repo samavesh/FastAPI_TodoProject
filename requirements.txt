@@ -1,0 +1,15 @@
+fastapi[standard]
+uvicorn[standard]
+sqlalchemy
+bcrypt==4.0.1
+python-multipart
+python-jose[cryptography]
+psycopg2-binary
+pymysql
+alembic
+passlib
+pytest
+httpx
+pytest-asyncio
+aiofiles
+jinja2

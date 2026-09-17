@@ -1,0 +1,9 @@
+.venv
+.DS_Store
+.pytest_cache
+.idea
+alembic
+alembic.ini
+testdb.db
+tests
+todosapp.db
