@@ -11,7 +11,7 @@ app = FastAPI()                  # Create the FastAPI instance
 # models.Base.metadata.create_all(bind=engine)            # Create the database tables based on the models defined in models.py
 Base.metadata.create_all(bind=engine)            # Create the database tables based on the models defined in models.py
 
-# templates = Jinja2Templates(directory='ToDoApp/templates')           # Create a Jinja2Templates instance to render HTML templates. The directory parameter specifies the location of the templates folder, which contains the HTML files used for rendering views in the application.
+# templates = Jinja2Templates(directory='TodoApp/templates')           # Create a Jinja2Templates instance to render HTML templates. The directory parameter specifies the location of the templates folder, which contains the HTML files used for rendering views in the application.
 
 app.mount('/static', StaticFiles(directory='TodoApp/static'), name='static')
 
