@@ -13,7 +13,7 @@ Base.metadata.create_all(bind=engine)            # Create the database tables ba
 
 # templates = Jinja2Templates(directory='ToDoApp/templates')           # Create a Jinja2Templates instance to render HTML templates. The directory parameter specifies the location of the templates folder, which contains the HTML files used for rendering views in the application.
 
-app.mount('/static', StaticFiles(directory='ToDoApp/static'), name='static')
+app.mount('/static', StaticFiles(directory='TodoApp/static'), name='static')
 
 @app.get("/")                      # Define a route for the root URL ("/") of the application. This route will handle GET requests and render the "home.html" template when accessed. The request parameter is of type Request, which allows access to the incoming HTTP request data.
 def test(request: Request):
