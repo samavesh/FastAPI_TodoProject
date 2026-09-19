@@ -12,7 +12,7 @@ from passlib.context import CryptContext
 router = APIRouter(
     prefix="/user",
     tags=["user"]
-)                           # Create an APIRouter instance for user-related routes with a prefix of "/user" and a tag of "user" for documentation purposes.
+)                           # Create an APIRouter instance for user-related routes with a prefix of "/user" and a tag of "user" for documentation purposes. APIRouter allows grouping related routes together and provides a way to organize the application into modular components.
 
 def get_db():                     # Dependency function to get a database session. It creates a new session using SessionLocal, yields it for use in the route handlers, and ensures that the session is closed after use.
     db = SessionLocal()
@@ -21,7 +21,7 @@ def get_db():                     # Dependency function to get a database sessio
     finally:
         db.close()
 
-db_dependency = Annotated[Session, Depends(get_db)]                # Dependency that provides a database session to route handlers. It uses the get_db function to create and manage the session lifecycle.
+db_dependency = Annotated[Session, Depends(get_db)]                # Dependency that provides a database session to route handlers. It uses the get_db function to create and manage the session lifecycle. Annotated is used to specify the type of the dependency (Session) and the dependency function (Depends(get_db)).
 user_dependency = Annotated[dict, Depends(get_current_user)]                # Dependency that provides the current authenticated user to route handlers. It uses the get_current_user function to retrieve the user information based on the authentication token provided in the request.
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')                  # Create a CryptContext instance for password hashing and verification using the bcrypt algorithm. The deprecated='auto' option allows automatic handling of deprecated hashing schemes.
 

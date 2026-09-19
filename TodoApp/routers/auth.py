@@ -16,7 +16,7 @@ router = APIRouter(
     tags=['auth']
 )
 
-# Secret Key & Algorithm work together to add a signature to JWT and makes sure JWT is secure and authorized
+# Secret Key & Algorithm work together to create a secure token that can be used for authentication and authorization purposes. The SECRET_KEY is a random string that is used to sign the token, while the ALGORITHM specifies the hashing algorithm used to create the signature. Together, they ensure that the token cannot be tampered with or forged, and that it can be verified by the server when it is received in subsequent requests.
 # SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_KEY = '680e779350d3fb81d8f919db33e26f3a55c0864e8b7a3aef175ffb5532fa0472'
 ALGORITHM = 'HS256'
@@ -33,7 +33,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-templates = Jinja2Templates(directory='TodoApp/templates')
+templates = Jinja2Templates(directory='TodoApp/templates')           # Create a Jinja2Templates instance to render HTML templates. The directory parameter specifies the location of the templates folder, which contains the HTML files used for rendering views in the application.
 
 ### Pages ###
 
