@@ -2,6 +2,7 @@
 .DS_Store
 .pytest_cache
 .idea
-__pycache__
+__pycache__/
+*.py[cod]
 testdb.db
 todosapp.db
