@@ -1,5 +1,4 @@
 from typing import Annotated
-from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, Path, HTTPException
 from starlette import status
@@ -22,6 +21,8 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
+
+### Endpoints ###
 
 @router.get('/todos', status_code=status.HTTP_200_OK)
 async def read_all(user: user_dependency, db: db_dependency):

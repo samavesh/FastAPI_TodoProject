@@ -1,28 +1,19 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
 from ..database import SessionLocal
 from ..models import Users
 from passlib.context import CryptContext
 from jose import jwt, JWTError
-from fastapi.templating import Jinja2Templates
+from ..schemas import CreateUserRequest, Token
 
 router = APIRouter(
     prefix='/auth',
     tags=['auth']
 )
-
-# Secret Key & Algorithm work together to create a secure token that can be used for authentication and authorization purposes. The SECRET_KEY is a random string that is used to sign the token, while the ALGORITHM specifies the hashing algorithm used to create the signature. Together, they ensure that the token cannot be tampered with or forged, and that it can be verified by the server when it is received in subsequent requests.
-# SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = '680e779350d3fb81d8f919db33e26f3a55c0864e8b7a3aef175ffb5532fa0472'
-ALGORITHM = 'HS256'
-
-bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')               # This line creates an instance of OAuth2PasswordBearer, which is a class provided by FastAPI to handle OAuth2 authentication using bearer tokens. The tokenUrl parameter specifies the URL endpoint where clients can obtain the access token. In this case, it is set to 'auth/token', indicating that clients should send their credentials to this endpoint to receive a token for authentication in subsequent requests.
 
 def get_db():
     db = SessionLocal()
@@ -33,34 +24,15 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-templates = Jinja2Templates(directory='TodoApp/templates')           # Create a Jinja2Templates instance to render HTML templates. The directory parameter specifies the location of the templates folder, which contains the HTML files used for rendering views in the application.
-
-### Pages ###
-
-@router.get("/login-page")
-def render_login_page(request: Request):
-    return templates.TemplateResponse(request=request, name="login.html")
-
-
-@router.get("/register-page")
-def render_register_page(request: Request):
-    return templates.TemplateResponse(request=request, name="register.html")
+# Secret Key & Algorithm work together to create a secure token that can be used for authentication and authorization purposes. The SECRET_KEY is a random string that is used to sign the token, while the ALGORITHM specifies the hashing algorithm used to create the signature. Together, they ensure that the token cannot be tampered with or forged, and that it can be verified by the server when it is received in subsequent requests.
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = '680e779350d3fb81d8f919db33e26f3a55c0864e8b7a3aef175ffb5532fa0472'
+ALGORITHM = 'HS256'
+bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')               # This line creates an instance of OAuth2PasswordBearer, which is a class provided by FastAPI to handle OAuth2 authentication using bearer tokens. The tokenUrl parameter specifies the URL endpoint where clients can obtain the access token. In this case, it is set to 'auth/token', indicating that clients should send their credentials to this endpoint to receive a token for authentication in subsequent requests.
 
 
 ### Endpoints ###
-
-class CreateUserRequest(BaseModel):           # This class defines the structure of the request body for creating a new user. It inherits from Pydantic's BaseModel, which provides data validation and serialization capabilities. The class contains several attributes that represent the required fields for creating a user, including username, email, first_name, last_name, password, and role. Each attribute is defined with its corresponding data type (str) to ensure that the incoming request data adheres to the expected format.
-    username: str
-    email: str
-    first_name: str
-    last_name: str
-    password: str
-    role: str
-    phone_number: str
-
-class Token(BaseModel):              # This class defines the structure of the response body for the access token returned after successful authentication. It inherits from Pydantic's BaseModel and contains two attributes: access_token and token_type. The access_token attribute is a string that represents the generated JWT access token, while the token_type attribute is also a string that indicates the type of token (e.g., "bearer"). This class is used to serialize the response data when returning the access token to the client after successful login.
-    access_token: str
-    token_type: str
 
 def authenticate_user(username: str, password: str, db):               # This function is responsible for authenticating a user based on their username and password. It takes three parameters: username (the username provided by the user), password (the password provided by the user), and db (the database session used to query the Users table). The function first queries the database to find a user with the given username. If no user is found, it returns False. If a user is found, it verifies the provided password against the hashed password stored in the database using bcrypt. If the password does not match, it returns False. If both the username and password are valid, it returns the user object.
     # user = Users.query.filter_by(username=username).first()
@@ -129,10 +101,10 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
                                │
              ┌─────────────────┴─────────────────┐
              │                                   │
-       NEW USER                              EXISTING USER
+         NEW USER                           EXISTING USER
              │                                   │
              ▼                                   ▼
-    /auth/register-page                    /auth/login-page
+      /auth/register                         /auth/login
              │                                   │
              ▼                                   ▼
        register.html                         login.html

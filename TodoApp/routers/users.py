@@ -1,13 +1,12 @@
 from typing import Annotated
-from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, Path, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
+from passlib.context import CryptContext
 from ..models import Todos, Users
 from ..database import SessionLocal
 from .auth import get_current_user
-from passlib.context import CryptContext
-
+from ..schemas import UserVerification
 
 router = APIRouter(
     prefix="/user",
@@ -25,10 +24,9 @@ db_dependency = Annotated[Session, Depends(get_db)]                # Dependency 
 user_dependency = Annotated[dict, Depends(get_current_user)]                # Dependency that provides the current authenticated user to route handlers. It uses the get_current_user function to retrieve the user information based on the authentication token provided in the request.
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')                  # Create a CryptContext instance for password hashing and verification using the bcrypt algorithm. The deprecated='auto' option allows automatic handling of deprecated hashing schemes.
 
-class UserVerification(BaseModel):
-    password: str
-    new_password: str = Field(min_length=6)
 
+
+### Endpoints ###
 
 @router.get('/', status_code=status.HTTP_200_OK)
 async def get_user(user: user_dependency, db: db_dependency):

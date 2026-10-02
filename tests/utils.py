@@ -27,7 +27,7 @@ def override_get_db():
 def override_get_current_user():
     return {'username': 'tomhardy', 'id': 1, 'user_role': 'admin'}
 
-client = TestClient(app)
+client = TestClient(app)            # This line creates an instance of TestClient, which is a testing utility provided by FastAPI. It allows you to simulate HTTP requests to your FastAPI application without running a live server. The app parameter is passed to the TestClient constructor, which is the FastAPI application instance defined in the main.py file. This enables you to test the endpoints and functionality of your FastAPI application in a controlled environment.
 
 @pytest.fixture                   # This decorator marks the test_todo function as a fixture in pytest. Fixtures are used to set up and tear down resources needed for tests. In this case, the fixture sets up a test database entry for a todo item before the test runs and cleans it up afterward.
 def test_todo():
